@@ -83,6 +83,15 @@ architecture Behavioral of top is
                );
     end component;
 
+    component onehot is
+        generic ( width  : integer );
+        port (
+            clk     : in STD_LOGIC;
+            en      : in STD_LOGIC;
+            rstn    : in STD_LOGIC;
+            o       : out STD_LOGIC_VECTOR (width-1 downto 0));
+    end component;
+
     signal en           : std_logic;
     signal en_toggle    : std_logic;
     signal en_ss        : std_logic_vector(7 downto 0);
@@ -152,9 +161,11 @@ end generate;
     an      <= en_ss;
 
 merge_ss_outs : process(clk, rstn)
+    variable i  : integer := 0;
 begin
     if rising_edge(clk) then
         if rstn = '0' then
+            i       := 0;
             ca      <= '0';
             cb      <= '0';
             cc      <= '0';
@@ -163,24 +174,38 @@ begin
             cf      <= '0';
             cg      <= '0';
             dp      <= '0';
-            en_ss   <= (others => '0');
+            -- en_ss   <= (others => '0');
             value   <= (others => '1');
         else
-            ca      <= ca_i(7) or ca_i(6) or ca_i(5) or ca_i(4) or ca_i(3) or ca_i(2) or ca_i(1) or ca_i(0);
-            cb      <= cb_i(7) or cb_i(6) or cb_i(5) or cb_i(4) or cb_i(3) or cb_i(2) or cb_i(1) or cb_i(0);
-            cc      <= cc_i(7) or cc_i(6) or cc_i(5) or cc_i(4) or cc_i(3) or cc_i(2) or cc_i(1) or cc_i(0);
-            cd      <= cd_i(7) or cd_i(6) or cd_i(5) or cd_i(4) or cd_i(3) or cd_i(2) or cd_i(1) or cd_i(0);
-            ce      <= ce_i(7) or ce_i(6) or ce_i(5) or ce_i(4) or ce_i(3) or ce_i(2) or ce_i(1) or ce_i(0);
-            cf      <= cf_i(7) or cf_i(6) or cf_i(5) or cf_i(4) or cf_i(3) or cf_i(2) or cf_i(1) or cf_i(0);
-            cg      <= cg_i(7) or cg_i(6) or cg_i(5) or cg_i(4) or cg_i(3) or cg_i(2) or cg_i(1) or cg_i(0);
-            dp      <= dp_i(7) or dp_i(6) or dp_i(5) or dp_i(4) or dp_i(3) or dp_i(2) or dp_i(1) or dp_i(0);
-            en_ss(7 downto 1)   <= en_ss(6 downto 0);
-            en_ss(0) <= en;
+            ca      <= ca_i(i);
+            cb      <= cb_i(i);
+            cc      <= cc_i(i);
+            cd      <= cd_i(i);
+            ce      <= ce_i(i);
+            cf      <= cf_i(i);
+            cg      <= cg_i(i);
+            dp      <= dp_i(i);
+            -- en_ss(7 downto 1)   <= en_ss(6 downto 0);
+            -- en_ss(0) <= en;
             if en = '1' then
                 value   <= value + 1;
+                if i >= 7 then
+                    i := 0;
+                else
+                    i := i + 1;
+                end if;
             end if;
         end if;
     end if;
 end process merge_ss_outs;
+
+ss_onehot: onehot
+    generic map ( width => 8 )
+    port map(
+        clk     => clk,
+        rstn    => rstn,
+        en      => en,
+        o       => en_ss
+    );
 
 end Behavioral;

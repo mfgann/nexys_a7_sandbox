@@ -65,7 +65,7 @@ gen_digit : process (clk, rstn)
 begin
     if rising_edge(clk) then
         if rstn = '0' then
-            ss_o    <= (others => '0');
+            ss_o    <= (others => '1');
         else
             if en = '0' then
                 ss_o    <= ss_o;
@@ -104,7 +104,7 @@ begin
                     when x"f" =>
                         ss_o    <= b"01001110";
                     when others =>
-                        ss_o    <= (others => '0');
+                        ss_o    <= (others => '1');
                 end case;
             end if;
         end if;
