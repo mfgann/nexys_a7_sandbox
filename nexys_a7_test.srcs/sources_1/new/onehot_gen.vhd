@@ -4,7 +4,7 @@
 --
 -- Create Date: 07/26/2022 03:48:42 PM
 -- Design Name:
--- Module Name: onehot - Behavioral
+-- Module Name: onehot_gen - Behavioral
 -- Project Name:
 -- Target Devices:
 -- Tool Versions:
@@ -31,35 +31,36 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity onehot is
+entity onehot_gen is
     Generic ( width  : integer := 8 );
     Port ( clk : in STD_LOGIC;
            en : in STD_LOGIC;
            rstn : in STD_LOGIC;
            o : out STD_LOGIC_VECTOR (width-1 downto 0));
-end onehot;
+end onehot_gen;
 
-architecture Behavioral of onehot is
+architecture Behavioral of onehot_gen is
     signal b    : std_logic_vector(width-1 downto 0);
     signal bb   : std_logic;
 begin
+    o <= b;
     onehot_p : process(clk)
     begin
         if rising_edge(clk) then
             if rstn = '0' then
                 b   <= (others => '0');
                 bb  <= '1';
-                o   <= (others => '0');
+                -- o   <= (others => '0');
             else
                 if en = '0' then
                     b   <= b;
                     bb  <= bb;
-                    o   <= (others => '0');
+                    -- o   <= (others => '0');
                 else
                     b(width-1 downto 1)   <= b(width-2 downto 0);
                     bb      <= b(width-2);
                     b(0)    <= bb;
-                    o       <= b;
+                    -- o       <= b;
                 end if;
             end if;
         end if;

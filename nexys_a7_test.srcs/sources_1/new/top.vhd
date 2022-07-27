@@ -83,7 +83,7 @@ architecture Behavioral of top is
                );
     end component;
 
-    component onehot is
+    component onehot_gen is
         generic ( width  : integer );
         port (
             clk     : in STD_LOGIC;
@@ -92,10 +92,15 @@ architecture Behavioral of top is
             o       : out STD_LOGIC_VECTOR (width-1 downto 0));
     end component;
 
-    signal en           : std_logic;
+    -- Type definitions for arrays
+    type ss_val_ary is array(natural range <>) of unsigned(3 downto 0);
+
+    -- Signals
+    signal values       : ss_val_ary(7 downto 0);
+    signal en_1ms       : std_logic;
+    signal en_1s        : std_logic;
     signal en_toggle    : std_logic;
     signal en_ss        : std_logic_vector(7 downto 0);
-    signal value        : unsigned(3 downto 0);
     signal ca_i         : std_logic_vector(7 downto 0);
     signal cb_i         : std_logic_vector(7 downto 0);
     signal cc_i         : std_logic_vector(7 downto 0);
@@ -119,7 +124,7 @@ begin
             else
                 led(0) <= '0';
             end if;
-            if en = '1' then
+            if en_1s = '1' then
                 en_toggle <= not en_toggle;
             end if;
         end if;
@@ -130,23 +135,32 @@ end process top_proc;
     led(15)     <= en_toggle;
     led(14 downto 1) <= (others => '0');
 
-en_generation: ce_gen
+en_1ms_generation: ce_gen
     generic map(
         en_div => 100_000 )
     port map(
         clk     => clk,
         rstn    => rstn,
-        en_out  => en
+        en_out  => en_1ms
+    );
+
+en_1s_generation: ce_gen
+    generic map(
+        en_div => 100_000_000 )
+    port map(
+        clk     => clk,
+        rstn    => rstn,
+        en_out  => en_1s
     );
 
 ss_gen : for ii in 0 to 7 generate
-    ss_ii : sevensegdecode
+    ss_decoder : sevensegdecode
         port map (
             clk  => clk,
             en   => en_ss(ii),
             rstn => rstn,
-            val  => std_logic_vector(value),
-            dpi  => '0',
+            val  => std_logic_vector(values(ii)),
+            dpi  => '1',
             ca   => ca_i(ii),
             cb   => cb_i(ii),
             cc   => cc_i(ii),
@@ -158,7 +172,7 @@ ss_gen : for ii in 0 to 7 generate
         );
 end generate;
 
-    an      <= en_ss;
+    an      <= not en_ss;
 
 merge_ss_outs : process(clk, rstn)
     variable i  : integer := 0;
@@ -175,20 +189,18 @@ begin
             cg      <= '0';
             dp      <= '0';
             -- en_ss   <= (others => '0');
-            value   <= (others => '1');
         else
-            ca      <= ca_i(i);
-            cb      <= cb_i(i);
-            cc      <= cc_i(i);
-            cd      <= cd_i(i);
-            ce      <= ce_i(i);
-            cf      <= cf_i(i);
-            cg      <= cg_i(i);
-            dp      <= dp_i(i);
+            ca      <= not ca_i(i);
+            cb      <= not cb_i(i);
+            cc      <= not cc_i(i);
+            cd      <= not cd_i(i);
+            ce      <= not ce_i(i);
+            cf      <= not cf_i(i);
+            cg      <= not cg_i(i);
+            dp      <= not dp_i(i);
             -- en_ss(7 downto 1)   <= en_ss(6 downto 0);
             -- en_ss(0) <= en;
-            if en = '1' then
-                value   <= value + 1;
+            if en_1ms = '1' then
                 if i >= 7 then
                     i := 0;
                 else
@@ -199,13 +211,37 @@ begin
     end if;
 end process merge_ss_outs;
 
-ss_onehot: onehot
+ss_onehot_gen: onehot_gen
     generic map ( width => 8 )
     port map(
         clk     => clk,
         rstn    => rstn,
-        en      => en,
+        en      => en_1ms,
         o       => en_ss
     );
+
+values_increment: process (clk)
+begin
+    if rising_edge(clk) then
+        if rstn = '0' then
+            values(7) <= x"7";
+            values(6) <= x"6";
+            values(5) <= x"5";
+            values(4) <= x"4";
+            values(3) <= x"3";
+            values(2) <= x"2";
+            values(1) <= x"1";
+            values(0) <= x"0";
+        else
+            val_inc_gen : for ix in 0 to 7 loop
+                if en_1s = '0' then
+                    values(ix) <= values(ix);
+                else
+                    values(ix) <= values(ix) + 1;
+                end if;
+            end loop;
+        end if;
+    end if;
+end process values_increment;
 
 end Behavioral;

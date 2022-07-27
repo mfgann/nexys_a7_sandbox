@@ -102,7 +102,7 @@ begin
                     when x"e" =>
                         ss_o    <= b"11011110";
                     when x"f" =>
-                        ss_o    <= b"01001110";
+                        ss_o    <= b"10001110";
                     when others =>
                         ss_o    <= (others => '1');
                 end case;
