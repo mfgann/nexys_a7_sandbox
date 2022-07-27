@@ -63,7 +63,7 @@ end component;
     signal clk      : std_logic := '0';
     signal rst      : std_logic := '0';
     signal led      : std_logic_vector(15 downto 0);
-    signal swx      : std_logic_vector(15 downto 0) := (others => 0);
+    signal swx      : std_logic_vector(15 downto 0) := (others => '0');
     signal ca       : STD_LOGIC;
     signal cb       : STD_LOGIC;
     signal cc       : STD_LOGIC;

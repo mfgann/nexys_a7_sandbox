@@ -95,11 +95,21 @@ architecture Behavioral of top is
             o       : out STD_LOGIC_VECTOR (width-1 downto 0));
     end component;
 
+    component onehot_decode is
+        Generic ( width : integer := 8 );
+        Port (  clk     : in  STD_LOGIC;
+                en      : in  STD_LOGIC;
+                rstn    : in  STD_LOGIC;
+                c       : in  STD_LOGIC_VECTOR(CEIL(LOG2(width))+1 downto 0);
+                o       : out STD_LOGIC_VECTOR(width-1 downto 0));
+    end component;
+
     -- Type definitions for arrays
     type ss_val_ary is array(natural range <>) of unsigned(3 downto 0);
 
     -- Signals
     signal values       : ss_val_ary(7 downto 0);
+    signal valslv       : std_logic_vector(31 downto 0);
     signal en_1ms       : std_logic;
     signal en_1s        : std_logic;
     signal en_ss        : std_logic_vector(7 downto 0);
@@ -112,6 +122,7 @@ architecture Behavioral of top is
     signal cg_i         : std_logic_vector(7 downto 0);
     signal dp_i         : std_logic_vector(7 downto 0);
     signal ledb         : std_logic_vector(15 downto 0);
+    signal test_o       : std_logic_vector(7 downto 0);
 begin
 
 led     <= ledb;
@@ -214,6 +225,15 @@ ss_onehot_gen: onehot_gen
         o       => en_ss
     );
 
+oh_decode: onehot_decode
+        Generic map ( width => 8 )
+        Port map (
+            clk     => clk,
+            en      => en_1ms,
+            rstn    => rstn,
+            c       => values(0),
+            o       => test_o );
+
 values_increment: process (clk)
 begin
     if rising_edge(clk) then
@@ -226,12 +246,15 @@ begin
             values(2) <= x"2";
             values(1) <= x"1";
             values(0) <= x"0";
+            valslv    <= (others => '0');
         else
             val_inc_gen : for ix in 0 to 7 loop
                 if en_1s = '0' then
                     values(ix) <= values(ix);
+                    valslv(ix*4+3 downto ix*4) <= std_logic_vector(values(ix));
                 else
                     values(ix) <= values(ix) + 1;
+                    valslv(ix*4+3 downto ix*4) <= std_logic_vector(values(ix) + 1);
                 end if;
             end loop;
         end if;

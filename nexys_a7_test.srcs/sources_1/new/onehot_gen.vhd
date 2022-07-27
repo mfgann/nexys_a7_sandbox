@@ -32,11 +32,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity onehot_gen is
-    Generic ( width  : integer := 8 );
-    Port ( clk : in STD_LOGIC;
-           en : in STD_LOGIC;
-           rstn : in STD_LOGIC;
-           o : out STD_LOGIC_VECTOR (width-1 downto 0));
+    Generic ( width : integer := 8 );
+    Port ( clk      : in STD_LOGIC;
+           en       : in STD_LOGIC;
+           rstn     : in STD_LOGIC;
+           o        : out STD_LOGIC_VECTOR(width-1 downto 0));
 end onehot_gen;
 
 architecture Behavioral of onehot_gen is
