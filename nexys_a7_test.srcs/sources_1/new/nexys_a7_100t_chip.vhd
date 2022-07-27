@@ -38,6 +38,9 @@ entity nexys_a7_100t_chip is
             -- LEDs
             LED          : out STD_LOGIC_VECTOR (15 downto 0);
 
+            -- Switches
+            SW           : in  STD_LOGIC_VECTOR (15 downto 0);
+
             -- 7-Segment Display
             CA           : out STD_LOGIC;
             CB           : out STD_LOGIC;
@@ -63,6 +66,7 @@ component top is
         clk          : in  STD_LOGIC;
         rstn         : in  STD_LOGIC;
         led          : out STD_LOGIC_VECTOR(15 downto 0);
+        swx          : in  STD_LOGIC_VECTOR(15 downto 0);
         ca           : out STD_LOGIC;
         cb           : out STD_LOGIC;
         cc           : out STD_LOGIC;
@@ -85,6 +89,7 @@ top_cmp: top port map (
     clk         => CLK100MHZ,
     rstn        => CPU_RESETN,
     led         => LED,
+    swx         => SW,
     ca          => CA,
     cb          => CB,
     cc          => CC,

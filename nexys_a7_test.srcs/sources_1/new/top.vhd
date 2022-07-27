@@ -38,6 +38,8 @@ entity top is
            rstn         : in  STD_LOGIC;
            -- LEDs
            led          : out STD_LOGIC_VECTOR(15 downto 0);
+           -- Switches
+           swx          : in  STD_LOGIC_VECTOR(15 downto 0);
            -- 7-seg display
            ca           : out STD_LOGIC;
            cb           : out STD_LOGIC;
@@ -63,6 +65,7 @@ architecture Behavioral of top is
         port (
             clk      : in  STD_LOGIC;
             rstn     : in  STD_LOGIC;
+            ce       : in  STD_LOGIC;
             en_out   : out STD_LOGIC);
     end component;
 
@@ -99,7 +102,6 @@ architecture Behavioral of top is
     signal values       : ss_val_ary(7 downto 0);
     signal en_1ms       : std_logic;
     signal en_1s        : std_logic;
-    signal en_toggle    : std_logic;
     signal en_ss        : std_logic_vector(7 downto 0);
     signal ca_i         : std_logic_vector(7 downto 0);
     signal cb_i         : std_logic_vector(7 downto 0);
@@ -109,37 +111,28 @@ architecture Behavioral of top is
     signal cf_i         : std_logic_vector(7 downto 0);
     signal cg_i         : std_logic_vector(7 downto 0);
     signal dp_i         : std_logic_vector(7 downto 0);
+    signal ledb         : std_logic_vector(15 downto 0);
 begin
 
-
+led     <= ledb;
 top_proc : process(clk, rstn, btn_left, btn_right, btn_down, btn_up, btn_select)
 begin
     if rising_edge(clk) then
         if rstn = '0' then
-            led(0)      <= '0';
-            en_toggle   <= '1';
+            ledb        <= (others => '0');
         else
-            if btn_select = '1' then
-                led(0) <= '1';
-            else
-                led(0) <= '0';
-            end if;
-            if en_1s = '1' then
-                en_toggle <= not en_toggle;
-            end if;
+            ledb <= swx;
         end if;
     end if;
 end process top_proc;
 
-    -- See if the enable works
-    led(15)     <= en_toggle;
-    led(14 downto 1) <= (others => '0');
 
 en_1ms_generation: ce_gen
     generic map(
         en_div => 100_000 )
     port map(
         clk     => clk,
+        ce      => '1',
         rstn    => rstn,
         en_out  => en_1ms
     );
@@ -149,6 +142,7 @@ en_1s_generation: ce_gen
         en_div => 100_000_000 )
     port map(
         clk     => clk,
+        ce      => '1',
         rstn    => rstn,
         en_out  => en_1s
     );

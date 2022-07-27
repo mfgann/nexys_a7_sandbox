@@ -43,6 +43,7 @@ component top is
         clk          : in  STD_LOGIC;
         rstn         : in  STD_LOGIC;
         led          : out STD_LOGIC_VECTOR(15 downto 0);
+        swx          : in  STD_LOGIC_VECTOR(15 downto 0);
         ca           : out STD_LOGIC;
         cb           : out STD_LOGIC;
         cc           : out STD_LOGIC;
@@ -59,10 +60,10 @@ component top is
         btn_select   : in  STD_LOGIC
     );
 end component;
-
     signal clk      : std_logic := '0';
     signal rst      : std_logic := '0';
     signal led      : std_logic_vector(15 downto 0);
+    signal swx      : std_logic_vector(15 downto 0) := (others => 0);
     signal ca       : STD_LOGIC;
     signal cb       : STD_LOGIC;
     signal cc       : STD_LOGIC;
@@ -84,6 +85,7 @@ top_cmp: top port map (
     clk         => clk,
     rstn        => rst,
     led         => led,
+    swx         => swx,
     ca          => ca,
     cb          => cb,
     cc          => cc,

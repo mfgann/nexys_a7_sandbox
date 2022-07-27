@@ -37,6 +37,7 @@ entity ce_gen is
     );
     Port (
         clk      : in  STD_LOGIC;
+        ce       : in  STD_LOGIC;
         rstn     : in  STD_LOGIC;
         en_out   : out STD_LOGIC);
 end ce_gen;
@@ -55,12 +56,17 @@ begin
             cnt     <= 0;
             en_o    <= '0';
         else
-            if cnt >= en_div then
-                en_o    <= '1';
-                cnt     <= 0;
-            else
+            if ce = '0' then
                 en_o    <= '0';
-                cnt     <= cnt + 1;
+                cnt     <= cnt;
+            else
+                if cnt >= en_div then
+                    en_o    <= '1';
+                    cnt     <= 0;
+                else
+                    en_o    <= '0';
+                    cnt     <= cnt + 1;
+                end if;
             end if;
         end if;
     end if;
