@@ -22,7 +22,8 @@ library work;
 use work.all;
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.ALL;
+use IEEE.MATH_REAL.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -34,28 +35,28 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity top is
-    Port ( clk          : in  STD_LOGIC;
-           rstn         : in  STD_LOGIC;
+    Port ( clk          : in  std_ulogic;
+           rstn         : in  std_ulogic;
            -- LEDs
-           led          : out STD_LOGIC_VECTOR(15 downto 0);
+           led          : out std_ulogic_vector(15 downto 0);
            -- Switches
-           swx          : in  STD_LOGIC_VECTOR(15 downto 0);
+           swx          : in  std_ulogic_vector(15 downto 0);
            -- 7-seg display
-           ca           : out STD_LOGIC;
-           cb           : out STD_LOGIC;
-           cc           : out STD_LOGIC;
-           cd           : out STD_LOGIC;
-           ce           : out STD_LOGIC;
-           cf           : out STD_LOGIC;
-           cg           : out STD_LOGIC;
-           dp           : out STD_LOGIC;
-           an           : out STD_LOGIC_VECTOR(7 downto 0);
+           ca           : out std_ulogic;
+           cb           : out std_ulogic;
+           cc           : out std_ulogic;
+           cd           : out std_ulogic;
+           ce           : out std_ulogic;
+           cf           : out std_ulogic;
+           cg           : out std_ulogic;
+           dp           : out std_ulogic;
+           an           : out std_ulogic_vector(7 downto 0);
            -- Directional buttons
-           btn_left     : in  STD_LOGIC;
-           btn_right    : in  STD_LOGIC;
-           btn_up       : in  STD_LOGIC;
-           btn_down     : in  STD_LOGIC;
-           btn_select   : in  STD_LOGIC);
+           btn_left     : in  std_ulogic;
+           btn_right    : in  std_ulogic;
+           btn_up       : in  std_ulogic;
+           btn_down     : in  std_ulogic;
+           btn_select   : in  std_ulogic);
 end top;
 
 architecture Behavioral of top is
@@ -63,45 +64,45 @@ architecture Behavioral of top is
         generic (
             en_div : integer );
         port (
-            clk      : in  STD_LOGIC;
-            rstn     : in  STD_LOGIC;
-            ce       : in  STD_LOGIC;
-            en_out   : out STD_LOGIC);
+            clk      : in  std_ulogic;
+            rstn     : in  std_ulogic;
+            ce       : in  std_ulogic;
+            en_out   : out std_ulogic);
     end component;
 
     component sevensegdecode is
-        port ( clk  : in  STD_LOGIC;
-               en   : in  STD_LOGIC;
-               rstn : in  STD_LOGIC;
-               val  : in  STD_LOGIC_VECTOR (3 downto 0);
-               dpi  : in  STD_LOGIC;
-               ca   : out STD_LOGIC;
-               cb   : out STD_LOGIC;
-               cc   : out STD_LOGIC;
-               cd   : out STD_LOGIC;
-               ce   : out STD_LOGIC;
-               cf   : out STD_LOGIC;
-               cg   : out STD_LOGIC;
-               dp   : out STD_LOGIC
+        port ( clk  : in  std_ulogic;
+               en   : in  std_ulogic;
+               rstn : in  std_ulogic;
+               val  : in  std_ulogic_vector (3 downto 0);
+               dpi  : in  std_ulogic;
+               ca   : out std_ulogic;
+               cb   : out std_ulogic;
+               cc   : out std_ulogic;
+               cd   : out std_ulogic;
+               ce   : out std_ulogic;
+               cf   : out std_ulogic;
+               cg   : out std_ulogic;
+               dp   : out std_ulogic
                );
     end component;
 
-    component onehot_gen is
-        generic ( width  : integer );
-        port (
-            clk     : in STD_LOGIC;
-            en      : in STD_LOGIC;
-            rstn    : in STD_LOGIC;
-            o       : out STD_LOGIC_VECTOR (width-1 downto 0));
-    end component;
+    -- component onehot_gen is
+    --     generic ( width  : integer );
+    --     port (
+    --         clk     : in std_ulogic;
+    --         en      : in std_ulogic;
+    --         rstn    : in std_ulogic;
+    --         o       : out std_ulogic_vector (width-1 downto 0));
+    -- end component;
 
     component onehot_decode is
         Generic ( width : integer := 8 );
-        Port (  clk     : in  STD_LOGIC;
-                en      : in  STD_LOGIC;
-                rstn    : in  STD_LOGIC;
-                c       : in  STD_LOGIC_VECTOR(CEIL(LOG2(width))+1 downto 0);
-                o       : out STD_LOGIC_VECTOR(width-1 downto 0));
+        Port (  clk     : in  std_ulogic;
+                en      : in  std_ulogic;
+                rstn    : in  std_ulogic;
+                c       : in  std_ulogic_vector(integer(CEIL(LOG2(real(width)))) downto 0);
+                o       : out std_ulogic_vector(width-1 downto 0));
     end component;
 
     -- Type definitions for arrays
@@ -109,20 +110,21 @@ architecture Behavioral of top is
 
     -- Signals
     signal values       : ss_val_ary(7 downto 0);
-    signal valslv       : std_logic_vector(31 downto 0);
-    signal en_1ms       : std_logic;
-    signal en_1s        : std_logic;
-    signal en_ss        : std_logic_vector(7 downto 0);
-    signal ca_i         : std_logic_vector(7 downto 0);
-    signal cb_i         : std_logic_vector(7 downto 0);
-    signal cc_i         : std_logic_vector(7 downto 0);
-    signal cd_i         : std_logic_vector(7 downto 0);
-    signal ce_i         : std_logic_vector(7 downto 0);
-    signal cf_i         : std_logic_vector(7 downto 0);
-    signal cg_i         : std_logic_vector(7 downto 0);
-    signal dp_i         : std_logic_vector(7 downto 0);
-    signal ledb         : std_logic_vector(15 downto 0);
-    signal test_o       : std_logic_vector(7 downto 0);
+    signal valslv       : std_ulogic_vector(31 downto 0);
+    signal en_1ms       : std_ulogic;
+    signal en_1s        : std_ulogic;
+    signal en_ss        : std_ulogic_vector(7 downto 0);
+    signal ca_i         : std_ulogic_vector(7 downto 0);
+    signal cb_i         : std_ulogic_vector(7 downto 0);
+    signal cc_i         : std_ulogic_vector(7 downto 0);
+    signal cd_i         : std_ulogic_vector(7 downto 0);
+    signal ce_i         : std_ulogic_vector(7 downto 0);
+    signal cf_i         : std_ulogic_vector(7 downto 0);
+    signal cg_i         : std_ulogic_vector(7 downto 0);
+    signal dp_i         : std_ulogic_vector(7 downto 0);
+    signal ledb         : std_ulogic_vector(15 downto 0);
+    signal test_o       : std_ulogic_vector(7 downto 0);
+    signal test_c       : unsigned(3 downto 0);
 begin
 
 led     <= ledb;
@@ -164,7 +166,7 @@ ss_gen : for ii in 0 to 7 generate
             clk  => clk,
             en   => en_ss(ii),
             rstn => rstn,
-            val  => std_logic_vector(values(ii)),
+            val  => std_ulogic_vector(values(ii)),
             dpi  => '1',
             ca   => ca_i(ii),
             cb   => cb_i(ii),
@@ -216,14 +218,14 @@ begin
     end if;
 end process merge_ss_outs;
 
-ss_onehot_gen: onehot_gen
-    generic map ( width => 8 )
-    port map(
-        clk     => clk,
-        rstn    => rstn,
-        en      => en_1ms,
-        o       => en_ss
-    );
+-- ss_onehot_gen: onehot_gen
+--     generic map ( width => 8 )
+--     port map(
+--         clk     => clk,
+--         rstn    => rstn,
+--         en      => en_1ms,
+--         o       => en_ss
+--     );
 
 oh_decode: onehot_decode
         Generic map ( width => 8 )
@@ -231,8 +233,27 @@ oh_decode: onehot_decode
             clk     => clk,
             en      => en_1ms,
             rstn    => rstn,
-            c       => values(0),
-            o       => test_o );
+            c       => std_ulogic_vector(test_c),
+            o       => en_ss);
+
+oh_count: process(clk)
+begin
+    if rising_edge(clk) then
+        if rstn = '0' then
+            test_c      <= "0001";
+        else
+            if en_1ms = '0' then
+                test_c      <= test_c;
+            else
+                if test_c >= 8 then
+                    test_c      <= "0001";
+                else
+                    test_c      <= test_c + 1;
+                end if;
+            end if;
+        end if;
+    end if;
+end process oh_count;
 
 values_increment: process (clk)
 begin
@@ -251,10 +272,10 @@ begin
             val_inc_gen : for ix in 0 to 7 loop
                 if en_1s = '0' then
                     values(ix) <= values(ix);
-                    valslv(ix*4+3 downto ix*4) <= std_logic_vector(values(ix));
+                    valslv(ix*4+3 downto ix*4) <= std_ulogic_vector(values(ix));
                 else
                     values(ix) <= values(ix) + 1;
-                    valslv(ix*4+3 downto ix*4) <= std_logic_vector(values(ix) + 1);
+                    valslv(ix*4+3 downto ix*4) <= std_ulogic_vector(values(ix) + 1);
                 end if;
             end loop;
         end if;

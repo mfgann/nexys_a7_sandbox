@@ -20,7 +20,7 @@
 
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -34,67 +34,67 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity sevensegbank is
     generic ( digits    : integer := 8;
               clkdiv    : integer := 100_000 );
-    Port ( clk      : in  STD_LOGIC;
-           en       : in  STD_LOGIC;
-           rstn     : in  STD_LOGIC;
-           values   : in  STD_LOGIC_VECTOR (digits*4-1 downto 0);
-           dp       : in  STD_LOGIC_VECTOR (digits-1 downto 0);
-           ca       : out STD_LOGIC;
-           cb       : out STD_LOGIC;
-           cc       : out STD_LOGIC;
-           cd       : out STD_LOGIC;
-           ce       : out STD_LOGIC;
-           cf       : out STD_LOGIC;
-           an       : out STD_LOGIC_VECTOR (digits-1 downto 0));
+    Port ( clk      : in  std_ulogic;
+           en       : in  std_ulogic;
+           rstn     : in  std_ulogic;
+           values   : in  std_ulogic_vector (digits*4-1 downto 0);
+           dp       : in  std_ulogic_vector (digits-1 downto 0);
+           ca       : out std_ulogic;
+           cb       : out std_ulogic;
+           cc       : out std_ulogic;
+           cd       : out std_ulogic;
+           ce       : out std_ulogic;
+           cf       : out std_ulogic;
+           an       : out std_ulogic_vector (digits-1 downto 0));
 end sevensegbank;
 
 architecture Behavioral of sevensegbank is
     component sevensegdecode is
-        port ( clk  : in  STD_LOGIC;
-               en   : in  STD_LOGIC;
-               rstn : in  STD_LOGIC;
-               val  : in  STD_LOGIC_VECTOR (3 downto 0);
-               dpi  : in  STD_LOGIC;
-               ca   : out STD_LOGIC;
-               cb   : out STD_LOGIC;
-               cc   : out STD_LOGIC;
-               cd   : out STD_LOGIC;
-               ce   : out STD_LOGIC;
-               cf   : out STD_LOGIC;
-               cg   : out STD_LOGIC;
-               dp   : out STD_LOGIC
+        port ( clk  : in  std_ulogic;
+               en   : in  std_ulogic;
+               rstn : in  std_ulogic;
+               val  : in  std_ulogic_vector (3 downto 0);
+               dpi  : in  std_ulogic;
+               ca   : out std_ulogic;
+               cb   : out std_ulogic;
+               cc   : out std_ulogic;
+               cd   : out std_ulogic;
+               ce   : out std_ulogic;
+               cf   : out std_ulogic;
+               cg   : out std_ulogic;
+               dp   : out std_ulogic
                );
     end component;
 
     component onehot_gen is
         generic ( width  : integer );
         port (
-            clk     : in STD_LOGIC;
-            en      : in STD_LOGIC;
-            rstn    : in STD_LOGIC;
-            o       : out STD_LOGIC_VECTOR (width-1 downto 0));
+            clk     : in std_ulogic;
+            en      : in std_ulogic;
+            rstn    : in std_ulogic;
+            o       : out std_ulogic_vector (width-1 downto 0));
     end component;
 
     component ce_gen is
         generic (
             en_div : integer );
         port (
-            clk      : in  STD_LOGIC;
-            rstn     : in  STD_LOGIC;
-            ce       : in  STD_LOGIC;
-            en_out   : out STD_LOGIC);
+            clk      : in  std_ulogic;
+            rstn     : in  std_ulogic;
+            ce       : in  std_ulogic;
+            en_out   : out std_ulogic);
     end component;
 
-    signal en_ss        : std_logic_vector(digits-1 downto 0);
-    signal ca_i         : std_logic_vector(digits-1 downto 0);
-    signal cb_i         : std_logic_vector(digits-1 downto 0);
-    signal cc_i         : std_logic_vector(digits-1 downto 0);
-    signal cd_i         : std_logic_vector(digits-1 downto 0);
-    signal ce_i         : std_logic_vector(digits-1 downto 0);
-    signal cf_i         : std_logic_vector(digits-1 downto 0);
-    signal cg_i         : std_logic_vector(digits-1 downto 0);
-    signal dp_i         : std_logic_vector(digits-1 downto 0);
-    signal val_i        : std_logic_vector(4*digits-1 downto 0);
+    signal en_ss        : std_ulogic_vector(digits-1 downto 0);
+    signal ca_i         : std_ulogic_vector(digits-1 downto 0);
+    signal cb_i         : std_ulogic_vector(digits-1 downto 0);
+    signal cc_i         : std_ulogic_vector(digits-1 downto 0);
+    signal cd_i         : std_ulogic_vector(digits-1 downto 0);
+    signal ce_i         : std_ulogic_vector(digits-1 downto 0);
+    signal cf_i         : std_ulogic_vector(digits-1 downto 0);
+    signal cg_i         : std_ulogic_vector(digits-1 downto 0);
+    signal dp_i         : std_ulogic_vector(digits-1 downto 0);
+    signal val_i        : std_ulogic_vector(4*digits-1 downto 0);
 begin
 
 reg_values : process(clk)

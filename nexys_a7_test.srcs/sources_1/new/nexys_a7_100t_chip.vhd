@@ -32,78 +32,118 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity nexys_a7_100t_chip is
-    Port (  CLK100MHZ    : in  STD_LOGIC;
-            CPU_RESETN   : in  STD_LOGIC;
+    Port (  CLK100MHZ    : in  std_logic;
+            CPU_RESETN   : in  std_logic;
 
             -- LEDs
-            LED          : out STD_LOGIC_VECTOR (15 downto 0);
+            LED          : out std_logic_vector (15 downto 0);
 
             -- Switches
-            SW           : in  STD_LOGIC_VECTOR (15 downto 0);
+            SW           : in  std_logic_vector (15 downto 0);
 
             -- 7-Segment Display
-            CA           : out STD_LOGIC;
-            CB           : out STD_LOGIC;
-            CC           : out STD_LOGIC;
-            CD           : out STD_LOGIC;
-            CE           : out STD_LOGIC;
-            CF           : out STD_LOGIC;
-            CG           : out STD_LOGIC;
-            DP           : out STD_LOGIC;
-            AN           : out STD_LOGIC_VECTOR (7 downto 0);
+            CA           : out std_logic;
+            CB           : out std_logic;
+            CC           : out std_logic;
+            CD           : out std_logic;
+            CE           : out std_logic;
+            CF           : out std_logic;
+            CG           : out std_logic;
+            DP           : out std_logic;
+            AN           : out std_logic_vector (7 downto 0);
 
             -- Directional buttons
-            BTNU         : in  STD_LOGIC;
-            BTND         : in  STD_LOGIC;
-            BTNL         : in  STD_LOGIC;
-            BTNR         : in  STD_LOGIC;
-            BTNC         : in  STD_LOGIC);
+            BTNU         : in  std_logic;
+            BTND         : in  std_logic;
+            BTNL         : in  std_logic;
+            BTNR         : in  std_logic;
+            BTNC         : in  std_logic);
 end nexys_a7_100t_chip;
 
 architecture Behavioral of nexys_a7_100t_chip is
 component top is
     port (
-        clk          : in  STD_LOGIC;
-        rstn         : in  STD_LOGIC;
-        led          : out STD_LOGIC_VECTOR(15 downto 0);
-        swx          : in  STD_LOGIC_VECTOR(15 downto 0);
-        ca           : out STD_LOGIC;
-        cb           : out STD_LOGIC;
-        cc           : out STD_LOGIC;
-        cd           : out STD_LOGIC;
-        ce           : out STD_LOGIC;
-        cf           : out STD_LOGIC;
-        cg           : out STD_LOGIC;
-        dp           : out STD_LOGIC;
-        an           : out STD_LOGIC_VECTOR(7 downto 0);
-        btn_left     : in  STD_LOGIC;
-        btn_right    : in  STD_LOGIC;
-        btn_up       : in  STD_LOGIC;
-        btn_down     : in  STD_LOGIC;
-        btn_select   : in  STD_LOGIC
+        clk          : in  std_ulogic;
+        rstn         : in  std_ulogic;
+        led          : out std_ulogic_vector(15 downto 0);
+        swx          : in  std_ulogic_vector(15 downto 0);
+        ca           : out std_ulogic;
+        cb           : out std_ulogic;
+        cc           : out std_ulogic;
+        cd           : out std_ulogic;
+        ce           : out std_ulogic;
+        cf           : out std_ulogic;
+        cg           : out std_ulogic;
+        dp           : out std_ulogic;
+        an           : out std_ulogic_vector(7 downto 0);
+        btn_left     : in  std_ulogic;
+        btn_right    : in  std_ulogic;
+        btn_up       : in  std_ulogic;
+        btn_down     : in  std_ulogic;
+        btn_select   : in  std_ulogic
     );
 end component;
+    signal clk_sul          : std_ulogic;
+    signal rstn_sul         : std_ulogic;
+    signal led_sul          : std_ulogic_vector(15 downto 0);
+    signal swx_sul          : std_ulogic_vector(15 downto 0);
+    signal ca_sul           : std_ulogic;
+    signal cb_sul           : std_ulogic;
+    signal cc_sul           : std_ulogic;
+    signal cd_sul           : std_ulogic;
+    signal ce_sul           : std_ulogic;
+    signal cf_sul           : std_ulogic;
+    signal cg_sul           : std_ulogic;
+    signal dp_sul           : std_ulogic;
+    signal an_sul           : std_ulogic_vector(7 downto 0);
+    signal btn_left_sul     : std_ulogic;
+    signal btn_right_sul    : std_ulogic;
+    signal btn_up_sul       : std_ulogic;
+    signal btn_down_sul     : std_ulogic;
+    signal btn_select_sul   : std_ulogic;
 begin
 
+    -- Inputs
+    clk_sul         <= std_ulogic(CLK100MHZ);
+    rstn_sul        <= std_ulogic(CPU_RESETN);
+    swx_sul         <= std_ulogic_vector(SW);
+    btn_left_sul    <= std_ulogic(BTNL);
+    btn_right_sul   <= std_ulogic(BTNR);
+    btn_up_sul      <= std_ulogic(BTNU);
+    btn_down_sul    <= std_ulogic(BTND);
+    btn_select_sul  <= std_ulogic(BTNC);
+
+    -- Outputs
+    LED     <= std_logic_vector(led_sul);
+    CA      <= std_logic(ca_sul);
+    CB      <= std_logic(cb_sul);
+    CC      <= std_logic(cc_sul);
+    CD      <= std_logic(cd_sul);
+    CE      <= std_logic(ce_sul);
+    CF      <= std_logic(cf_sul);
+    CG      <= std_logic(cg_sul);
+    DP      <= std_logic(dp_sul);
+    AN      <= std_logic_vector(an_sul);
+
 top_cmp: top port map (
-    clk         => CLK100MHZ,
-    rstn        => CPU_RESETN,
-    led         => LED,
-    swx         => SW,
-    ca          => CA,
-    cb          => CB,
-    cc          => CC,
-    cd          => CD,
-    ce          => CE,
-    cf          => CF,
-    cg          => CG,
-    dp          => DP,
-    an          => AN,
-    btn_left    => BTNL,
-    btn_right   => BTNR,
-    btn_up      => BTNU,
-    btn_down    => BTND,
-    btn_select  => BTNC
+    clk         => clk_sul,
+    rstn        => rstn_sul,
+    led         => led_sul,
+    swx         => swx_sul,
+    ca          => ca_sul,
+    cb          => cb_sul,
+    cc          => cc_sul,
+    cd          => cd_sul,
+    ce          => ce_sul,
+    cf          => cf_sul,
+    cg          => cg_sul,
+    dp          => dp_sul,
+    an          => an_sul,
+    btn_left    => btn_left_sul,
+    btn_right   => btn_right_sul,
+    btn_up      => btn_up_sul,
+    btn_down    => btn_down_sul,
+    btn_select  => btn_select_sul
 );
 
 end Behavioral;

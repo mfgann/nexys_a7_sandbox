@@ -20,7 +20,7 @@
 
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -36,14 +36,14 @@ entity ce_gen is
         en_div   : integer := 1
     );
     Port (
-        clk      : in  STD_LOGIC;
-        ce       : in  STD_LOGIC;
-        rstn     : in  STD_LOGIC;
-        en_out   : out STD_LOGIC);
+        clk      : in  std_ulogic;
+        ce       : in  std_ulogic;
+        rstn     : in  std_ulogic;
+        en_out   : out std_ulogic);
 end ce_gen;
 
 architecture Behavioral of ce_gen is
-    signal en_o     : std_logic;
+    signal en_o     : std_ulogic;
     signal cnt      : integer := 0;
 begin
 

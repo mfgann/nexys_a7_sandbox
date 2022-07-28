@@ -20,7 +20,7 @@
 
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -32,24 +32,24 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity sevensegdecode is
-    Port ( clk  : in  STD_LOGIC;
-           en   : in  STD_LOGIC;
-           rstn : in  STD_LOGIC;
-           val  : in  STD_LOGIC_VECTOR (3 downto 0);
-           dpi  : in  STD_LOGIC;
-           ca   : out STD_LOGIC;
-           cb   : out STD_LOGIC;
-           cc   : out STD_LOGIC;
-           cd   : out STD_LOGIC;
-           ce   : out STD_LOGIC;
-           cf   : out STD_LOGIC;
-           cg   : out STD_LOGIC;
-           dp   : out STD_LOGIC
+    Port ( clk  : in  std_ulogic;
+           en   : in  std_ulogic;
+           rstn : in  std_ulogic;
+           val  : in  std_ulogic_vector (3 downto 0);
+           dpi  : in  std_ulogic;
+           ca   : out std_ulogic;
+           cb   : out std_ulogic;
+           cc   : out std_ulogic;
+           cd   : out std_ulogic;
+           ce   : out std_ulogic;
+           cf   : out std_ulogic;
+           cg   : out std_ulogic;
+           dp   : out std_ulogic
            );
 end sevensegdecode;
 
 architecture Behavioral of sevensegdecode is
-    signal ss_o             : std_logic_vector(7 downto 0);
+    signal ss_o             : std_ulogic_vector(7 downto 0);
 begin
 
     ca  <= ss_o(7);

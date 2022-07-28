@@ -20,7 +20,7 @@
 
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -33,15 +33,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity onehot_gen is
     Generic ( width : integer := 8 );
-    Port ( clk      : in STD_LOGIC;
-           en       : in STD_LOGIC;
-           rstn     : in STD_LOGIC;
-           o        : out STD_LOGIC_VECTOR(width-1 downto 0));
+    Port ( clk      : in std_ulogic;
+           en       : in std_ulogic;
+           rstn     : in std_ulogic;
+           o        : out std_ulogic_vector(width-1 downto 0));
 end onehot_gen;
 
 architecture Behavioral of onehot_gen is
-    signal b    : std_logic_vector(width-1 downto 0);
-    signal bb   : std_logic;
+    signal b    : std_ulogic_vector(width-1 downto 0);
+    signal bb   : std_ulogic;
 begin
     o <= b;
     onehot_p : process(clk)

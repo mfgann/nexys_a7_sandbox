@@ -22,7 +22,7 @@ library work;
 use work.all;
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -40,44 +40,44 @@ end top_tb;
 architecture Behavioral of top_tb is
 component top is
     port (
-        clk          : in  STD_LOGIC;
-        rstn         : in  STD_LOGIC;
-        led          : out STD_LOGIC_VECTOR(15 downto 0);
-        swx          : in  STD_LOGIC_VECTOR(15 downto 0);
-        ca           : out STD_LOGIC;
-        cb           : out STD_LOGIC;
-        cc           : out STD_LOGIC;
-        cd           : out STD_LOGIC;
-        ce           : out STD_LOGIC;
-        cf           : out STD_LOGIC;
-        cg           : out STD_LOGIC;
-        dp           : out STD_LOGIC;
-        an           : out STD_LOGIC_VECTOR(7 downto 0);
-        btn_left     : in  STD_LOGIC;
-        btn_right    : in  STD_LOGIC;
-        btn_up       : in  STD_LOGIC;
-        btn_down     : in  STD_LOGIC;
-        btn_select   : in  STD_LOGIC
+        clk          : in  std_ulogic;
+        rstn         : in  std_ulogic;
+        led          : out std_ulogic_vector(15 downto 0);
+        swx          : in  std_ulogic_vector(15 downto 0);
+        ca           : out std_ulogic;
+        cb           : out std_ulogic;
+        cc           : out std_ulogic;
+        cd           : out std_ulogic;
+        ce           : out std_ulogic;
+        cf           : out std_ulogic;
+        cg           : out std_ulogic;
+        dp           : out std_ulogic;
+        an           : out std_ulogic_vector(7 downto 0);
+        btn_left     : in  std_ulogic;
+        btn_right    : in  std_ulogic;
+        btn_up       : in  std_ulogic;
+        btn_down     : in  std_ulogic;
+        btn_select   : in  std_ulogic
     );
 end component;
-    signal clk      : std_logic := '0';
-    signal rst      : std_logic := '0';
-    signal led      : std_logic_vector(15 downto 0);
-    signal swx      : std_logic_vector(15 downto 0) := (others => '0');
-    signal ca       : STD_LOGIC;
-    signal cb       : STD_LOGIC;
-    signal cc       : STD_LOGIC;
-    signal cd       : STD_LOGIC;
-    signal ce       : STD_LOGIC;
-    signal cf       : STD_LOGIC;
-    signal cg       : STD_LOGIC;
-    signal dp       : STD_LOGIC;
-    signal an       : STD_LOGIC_VECTOR(7 downto 0);
-    signal btn_l    : std_logic := '0';
-    signal btn_r    : std_logic := '0';
-    signal btn_u    : std_logic := '0';
-    signal btn_d    : std_logic := '0';
-    signal btn_s    : std_logic := '0';
+    signal clk      : std_ulogic := '0';
+    signal rst      : std_ulogic := '0';
+    signal led      : std_ulogic_vector(15 downto 0);
+    signal swx      : std_ulogic_vector(15 downto 0) := (others => '0');
+    signal ca       : std_ulogic;
+    signal cb       : std_ulogic;
+    signal cc       : std_ulogic;
+    signal cd       : std_ulogic;
+    signal ce       : std_ulogic;
+    signal cf       : std_ulogic;
+    signal cg       : std_ulogic;
+    signal dp       : std_ulogic;
+    signal an       : std_ulogic_vector(7 downto 0);
+    signal btn_l    : std_ulogic := '0';
+    signal btn_r    : std_ulogic := '0';
+    signal btn_u    : std_ulogic := '0';
+    signal btn_d    : std_ulogic := '0';
+    signal btn_s    : std_ulogic := '0';
 
 begin
 
