@@ -72,40 +72,41 @@ begin
             else
                 case val is
                     when x"0" =>
-                        ss_o    <= b"11111100";
+                        ss_o(7 downto 1)    <= b"11111100";
                     when x"1" =>
-                        ss_o    <= b"01100000";
+                        ss_o(7 downto 1)    <= b"01100000";
                     when x"2" =>
-                        ss_o    <= b"11011010";
+                        ss_o(7 downto 1)    <= b"11011010";
                     when x"3" =>
-                        ss_o    <= b"11110010";
+                        ss_o(7 downto 1)    <= b"11110010";
                     when x"4" =>
-                        ss_o    <= b"01100110";
+                        ss_o(7 downto 1)    <= b"01100110";
                     when x"5" =>
-                        ss_o    <= b"10110110";
+                        ss_o(7 downto 1)    <= b"10110110";
                     when x"6" =>
-                        ss_o    <= b"10111110";
+                        ss_o(7 downto 1)    <= b"10111110";
                     when x"7" =>
-                        ss_o    <= b"11100000";
+                        ss_o(7 downto 1)    <= b"11100000";
                     when x"8" =>
-                        ss_o    <= b"11111110";
+                        ss_o(7 downto 1)    <= b"11111110";
                     when x"9" =>
-                        ss_o    <= b"11100110";
+                        ss_o(7 downto 1)    <= b"11100110";
                     when x"a" =>
-                        ss_o    <= b"11111010";
+                        ss_o(7 downto 1)    <= b"11111010";
                     when x"b" =>
-                        ss_o    <= b"00111110";
+                        ss_o(7 downto 1)    <= b"00111110";
                     when x"c" =>
-                        ss_o    <= b"10011100";
+                        ss_o(7 downto 1)    <= b"10011100";
                     when x"d" =>
-                        ss_o    <= b"01111010";
+                        ss_o(7 downto 1)    <= b"01111010";
                     when x"e" =>
-                        ss_o    <= b"11011110";
+                        ss_o(7 downto 1)    <= b"11011110";
                     when x"f" =>
-                        ss_o    <= b"10001110";
+                        ss_o(7 downto 1)    <= b"10001110";
                     when others =>
-                        ss_o    <= (others => '1');
+                        ss_o(7 downto 1)    <= (others => '1');
                 end case;
+                ss_o(0)     <= dpi;
             end if;
         end if;
     end if;
