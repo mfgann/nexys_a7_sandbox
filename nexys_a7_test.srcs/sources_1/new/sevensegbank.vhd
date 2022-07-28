@@ -38,13 +38,15 @@ entity sevensegbank is
            en       : in  std_ulogic;
            rstn     : in  std_ulogic;
            values   : in  std_ulogic_vector (digits*4-1 downto 0);
-           dp       : in  std_ulogic_vector (digits-1 downto 0);
+           dpi      : in  std_ulogic_vector (digits-1 downto 0);
            ca       : out std_ulogic;
            cb       : out std_ulogic;
            cc       : out std_ulogic;
            cd       : out std_ulogic;
            ce       : out std_ulogic;
            cf       : out std_ulogic;
+           cg       : out std_ulogic;
+           dp       : out std_ulogic;
            an       : out std_ulogic_vector (digits-1 downto 0));
 end sevensegbank;
 
@@ -85,6 +87,7 @@ architecture Behavioral of sevensegbank is
             en_out   : out std_ulogic);
     end component;
 
+    signal en_1ms       : std_ulogic;
     signal en_ss        : std_ulogic_vector(digits-1 downto 0);
     signal ca_i         : std_ulogic_vector(digits-1 downto 0);
     signal cb_i         : std_ulogic_vector(digits-1 downto 0);
@@ -93,6 +96,7 @@ architecture Behavioral of sevensegbank is
     signal ce_i         : std_ulogic_vector(digits-1 downto 0);
     signal cf_i         : std_ulogic_vector(digits-1 downto 0);
     signal cg_i         : std_ulogic_vector(digits-1 downto 0);
+    signal dpi_i        : std_ulogic_vector(digits-1 downto 0);
     signal dp_i         : std_ulogic_vector(digits-1 downto 0);
     signal val_i        : std_ulogic_vector(4*digits-1 downto 0);
 begin
@@ -102,14 +106,14 @@ begin
     if rising_edge(clk) then
         if rstn = '0' then
             val_i       <= (others => '0');
-            dp_i        <= (others => '0');
+            dpi_i       <= (others => '0');
         else
             if en = '0' then
                 val_i       <= val_i;
-                dp_i        <= dp_i;
+                dpi_i       <= dpi_i;
             else
                 val_i       <= values;
-                dp_i        <= dp;
+                dpi_i       <= dpi;
             end if;
         end if;
     end if;
@@ -159,7 +163,7 @@ sevenseg_gen : for ii in 0 to digits-1 generate
             en   => en_ss(ii),
             rstn => rstn,
             val  => val_i(ii*4+3 downto ii*4),
-            dpi  => dp_i,
+            dpi  => dpi_i(ii),
             ca   => ca_i(ii),
             cb   => cb_i(ii),
             cc   => cc_i(ii),
